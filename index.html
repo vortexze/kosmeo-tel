@@ -121,6 +121,20 @@
   .maj-note{background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.3);
     color:var(--accent2); border-radius:12px; padding:10px 14px; font-size:14px;
     display:flex; align-items:center; gap:10px; margin-bottom:14px}
+  /* bandeau d'installation sur l'écran d'accueil */
+  #install{display:none; background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.4);
+    border-radius:14px; padding:16px; text-align:center}
+  #install b{color:var(--text)}
+  #install .btn{margin-top:12px}
+  #install .ios{color:var(--muted); font-size:14.5px; line-height:1.6}
+  #install .ios b{color:var(--accent2)}
+  #install-app{display:flex; align-items:center; gap:12px;
+    background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.4);
+    border-radius:14px; padding:13px 15px; margin-bottom:14px}
+  #install-app b{color:var(--text)}
+  #install-app > div{flex:1}
+  #install-app-x{background:none; border:none; color:var(--muted); font-size:16px;
+    cursor:pointer; padding:4px 8px; flex-shrink:0}
 </style>
 </head>
 <body>
@@ -128,6 +142,20 @@
 <!-- ================= Écran d'appairage ================= -->
 <section id="appairage">
   <div class="marque"><span class="logo-k">K</span> Kosméo</div>
+
+  <div id="install">
+    <div id="install-android" style="display:none">
+      <b>Installez Kosméo sur votre téléphone</b>
+      <div style="color:var(--muted); font-size:14px; margin-top:4px">Pour l'avoir sur votre écran d'accueil, comme une vraie application.</div>
+      <button class="btn" id="btn-install">📲 Installer l'application</button>
+    </div>
+    <div id="install-ios" class="ios" style="display:none">
+      <b>Ajoutez Kosméo à votre écran d'accueil</b><br>
+      Touchez le bouton <b>Partager</b> (le carré avec une flèche vers le haut, en bas de Safari),
+      puis descendez et touchez <b>« Sur l'écran d'accueil »</b>.
+    </div>
+  </div>
+
   <p class="app-intro">
     Votre agenda et votre budget, dans votre poche.<br>
     Sur votre ordinateur, ouvrez l'onglet <b>Mon téléphone</b> et recopiez ici le
@@ -152,6 +180,14 @@
   </header>
 
   <main>
+    <div id="install-app" style="display:none">
+      <div>
+        <b id="install-app-titre">Installer Kosméo</b>
+        <div id="install-app-txt" style="color:var(--muted); font-size:13.5px; margin-top:3px"></div>
+      </div>
+      <button class="btn" id="btn-install-app" style="width:auto; padding:11px 16px; display:none">Installer</button>
+      <button id="install-app-x" aria-label="Fermer">✕</button>
+    </div>
     <div class="maj-note" id="maj-note" style="display:none"></div>
 
     <section class="page actif" id="page-agenda">
@@ -551,6 +587,41 @@ setInterval(() => { if (!document.hidden && estOuverte()) charger(CODE); }, 9000
 
 // service worker (installable + hors-ligne)
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+/* ---------- « Installer sur l'écran d'accueil » (écran de connexion ET dans l'appli) ---------- */
+let promptInstall = null;
+const dejaInstallee = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const estIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+async function lancerInstall() {
+  if (!promptInstall) return;
+  promptInstall.prompt();
+  await promptInstall.userChoice;
+  promptInstall = null;
+  cacherInstall();
+}
+function cacherInstall() { $('#install').style.display = 'none'; $('#install-app').style.display = 'none'; }
+
+function afficherInstall() {
+  if (dejaInstallee || localStorage.getItem('install_masque')) return;
+  if (promptInstall) {                 // Android : bouton
+    $('#install').style.display = ''; $('#install-android').style.display = '';
+    $('#install-app').style.display = ''; $('#btn-install-app').style.display = '';
+    $('#install-app-txt').textContent = 'Retrouvez Kosméo sur votre écran d\'accueil, comme une vraie appli.';
+  } else if (estIOS) {                  // iPhone : consigne
+    $('#install').style.display = ''; $('#install-ios').style.display = '';
+    $('#install-app').style.display = '';
+    $('#install-app-titre').textContent = 'Ajouter à l\'écran d\'accueil';
+    $('#install-app-txt').innerHTML = 'Touchez <b>Partager</b> (carré + flèche, en bas de Safari) puis <b>« Sur l\'écran d\'accueil »</b>.';
+  }
+}
+
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); promptInstall = e; afficherInstall(); });
+window.addEventListener('appinstalled', cacherInstall);
+$('#btn-install').addEventListener('click', lancerInstall);
+$('#btn-install-app').addEventListener('click', lancerInstall);
+$('#install-app-x').addEventListener('click', () => { localStorage.setItem('install_masque', '1'); cacherInstall(); });
+if (estIOS) afficherInstall();          // iOS n'émet pas beforeinstallprompt
 </script>
 </body>
 </html>
