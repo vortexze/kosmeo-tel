@@ -25,6 +25,35 @@
     background:linear-gradient(135deg,#10b981,#34d399); display:grid; place-items:center;
     color:#fff; font-weight:800; font-size:22px; font-family:Bahnschrift,"Segoe UI",sans-serif}
 
+  /* ---------- Animation de démarrage (comme sur l'ordinateur) ---------- */
+  #splash{
+    position:fixed; inset:0; z-index:500;
+    background:radial-gradient(900px 520px at 50% 42%, #0c2018, #0e1016 72%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
+    transition:opacity .55s ease;
+  }
+  #splash.parti{opacity:0; pointer-events:none}
+  .splash-logo{
+    width:118px; height:118px; border-radius:30px; display:grid; place-items:center;
+    flex-shrink:0; flex-grow:0;
+    font-size:60px; font-weight:800; color:#fff; font-family:Bahnschrift,"Segoe UI",sans-serif;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    animation:splashPop .85s cubic-bezier(.2,.9,.3,1.4), splashGlow 1.5s ease-in-out infinite;
+  }
+  @keyframes splashPop{0%{opacity:0;transform:scale(.5) rotate(-14deg)}100%{opacity:1;transform:none}}
+  @keyframes splashGlow{0%,100%{box-shadow:0 0 12px 2px rgba(16,185,129,.22)}50%{box-shadow:0 0 78px 16px rgba(16,185,129,.6)}}
+  .splash-nom{
+    font-family:"Bahnschrift","Segoe UI Semibold","Segoe UI",sans-serif;
+    font-size:34px; font-weight:600; letter-spacing:8px; opacity:0;
+    background:linear-gradient(120deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    animation:splashNom .8s ease .4s forwards;
+  }
+  @keyframes splashNom{from{opacity:0;letter-spacing:18px}to{opacity:1;letter-spacing:7px}}
+  @media (prefers-reduced-motion:reduce){
+    .splash-logo,.splash-nom{animation:none; opacity:1}
+  }
+
   /* ---------- Écran d'appairage ---------- */
   #appairage{min-height:100dvh; display:flex; flex-direction:column; justify-content:center;
     gap:22px; padding:28px 22px; max-width:460px; margin:0 auto}
@@ -70,8 +99,20 @@
   .evt .jour{font-size:22px; font-weight:700; font-family:Bahnschrift,sans-serif; line-height:1}
   .evt .mois{font-size:12px; color:var(--muted); text-transform:uppercase}
   .evt .heure{font-size:13px; color:var(--accent2); margin-top:3px}
+  .evt-corps{flex:1; min-width:0}
   .evt .quoi{font-weight:600}
   .evt .note{color:var(--muted); font-size:14px}
+  .evt-x{background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer;
+    padding:4px 8px; border-radius:8px; flex-shrink:0; align-self:center}
+  .evt-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
+  .rdv-ajout{display:flex; flex-direction:column; gap:9px; margin-bottom:16px}
+  .rdv-ajout input{padding:13px 14px; border-radius:12px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none; min-width:0}
+  .rdv-ajout input:focus{border-color:var(--accent)}
+  .rdv-quand{display:flex; gap:9px}
+  .rdv-quand #rdv-date{flex:1} .rdv-quand #rdv-heure{width:120px; flex-shrink:0}
+  .rdv-ajout button{padding:13px; border:none; border-radius:12px; font-size:15.5px; font-weight:600;
+    color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent2)); cursor:pointer; font-family:inherit}
 
   /* budget */
   .bud-resume{display:flex; gap:11px; margin-bottom:14px}
@@ -87,6 +128,22 @@
   .ope .cat{color:var(--muted); font-size:13px}
   .ope .mt{font-weight:700; white-space:nowrap}
   .mt.vert{color:var(--ok)} .mt.rouge{color:var(--danger)}
+  .ope-x{margin-left:6px; background:none; border:none; color:var(--muted); font-size:15px;
+    cursor:pointer; padding:4px 6px; border-radius:8px; flex-shrink:0}
+  .ope-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
+  .bud-ajout{margin-bottom:14px}
+  .bud-sens{display:flex; gap:8px; margin-bottom:9px}
+  .bud-sens .sens{flex:1; padding:9px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--muted); font-family:inherit; font-size:14.5px; cursor:pointer}
+  .bud-sens .sens.actif[data-sens="depense"]{background:rgba(239,68,102,.15); border-color:var(--danger); color:var(--danger)}
+  .bud-sens .sens.actif[data-sens="revenu"]{background:rgba(52,211,153,.15); border-color:var(--ok); color:var(--ok)}
+  .bud-champs{display:flex; gap:9px}
+  .bud-champs input{padding:13px 14px; border-radius:12px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none; min-width:0}
+  .bud-champs input:focus{border-color:var(--accent)}
+  #bud-montant{width:110px; flex-shrink:0} #bud-libelle{flex:1}
+  .bud-champs button{width:50px; border:none; border-radius:12px; font-size:24px; font-weight:600;
+    color:#fff; background:linear-gradient(135deg,#10b981,#34d399); cursor:pointer; flex-shrink:0}
 
   /* tâches */
   .tache{display:flex; gap:12px; align-items:center; padding:13px 0; border-bottom:1px solid var(--border)}
@@ -138,6 +195,12 @@
 </style>
 </head>
 <body>
+
+<!-- ================= Animation de démarrage ================= -->
+<div id="splash">
+  <div class="splash-logo">K</div>
+  <div class="splash-nom">KOSMÉO</div>
+</div>
 
 <!-- ================= Écran d'appairage ================= -->
 <section id="appairage">
@@ -192,6 +255,14 @@
 
     <section class="page actif" id="page-agenda">
       <h2 class="titre-page">Prochains rendez-vous</h2>
+      <form id="rdv-form" class="rdv-ajout">
+        <input id="rdv-titre" type="text" placeholder="Ex : Rendez-vous dentiste" maxlength="80">
+        <div class="rdv-quand">
+          <input id="rdv-date" type="date">
+          <input id="rdv-heure" type="time">
+        </div>
+        <button type="submit">Ajouter le rendez-vous</button>
+      </form>
       <div id="liste-agenda"></div>
     </section>
 
@@ -201,6 +272,17 @@
         <div class="bud-case"><div class="lib">Rentré</div><div class="val vert" id="bud-rentre">—</div></div>
         <div class="bud-case"><div class="lib">Dépensé</div><div class="val rouge" id="bud-depense">—</div></div>
       </div>
+      <form id="bud-form" class="bud-ajout">
+        <div class="bud-sens">
+          <button type="button" class="sens actif" data-sens="depense">Dépense</button>
+          <button type="button" class="sens" data-sens="revenu">Rentrée</button>
+        </div>
+        <div class="bud-champs">
+          <input id="bud-montant" type="text" inputmode="decimal" placeholder="Montant €">
+          <input id="bud-libelle" type="text" placeholder="Ex : Courses, Essence…" maxlength="60">
+          <button type="submit" aria-label="Ajouter">+</button>
+        </div>
+      </form>
       <div class="carte" id="liste-budget"></div>
     </section>
 
@@ -294,10 +376,10 @@ async function driveDeposer(octets) {
     headers: { Authorization: 'Bearer ' + JETON, 'Content-Type': 'multipart/related; boundary=' + bnd }, body: corps });
 }
 
-/* Après une modif de tâche sur le téléphone : lire le Drive, fusionner les
-   tâches, renvoyer. Les autres sections (budget, agenda) restent gérées par le
-   PC — on reprend toujours leur dernière version du Drive, jamais on ne les écrase. */
-async function syncTaches() {
+/* Après une modif sur le téléphone : lire le Drive, FUSIONNER les sections
+   modifiables (tâches, budget, agenda) sans rien perdre, puis renvoyer. Les
+   prévisions restent gérées par le PC — on reprend leur dernière version. */
+async function syncMaintenant() {
   localStorage.setItem('kosmeo_cache', JSON.stringify(DATA));   // filet : la modif est gardée localement
   rendre(DATA);
   try {
@@ -306,7 +388,8 @@ async function syncTaches() {
     try { distant = await dechiffrer(await recupererFichier(), CODE); } catch (_) {}
     if (distant) {
       DATA.taches = fusionnerParId(DATA.taches || [], distant.taches || []);
-      DATA.budget = distant.budget; DATA.agenda = distant.agenda;
+      DATA.budget = fusionnerParId(DATA.budget || [], distant.budget || []);
+      DATA.agenda = fusionnerParId(DATA.agenda || [], distant.agenda || []);
       DATA.recurrents = distant.recurrents; DATA.previsionnel = distant.previsionnel;
     }
     await driveDeposer(await chiffrer(DATA, CODE));
@@ -314,6 +397,7 @@ async function syncTaches() {
     rendre(DATA);
   } catch (e) { /* hors-ligne : la modif est déjà gardée, elle repartira plus tard */ }
 }
+const syncTaches = syncMaintenant;   // ancien nom conservé pour les appels existants
 
 /* ---------- accès à Google Drive (lecture seule du fichier de Kosméo) ----------
    Scope drive.file : l'appli ne voit QUE le fichier que Kosméo a déposé, rien
@@ -387,39 +471,46 @@ function rendre(data) {
   DATA = data;
   $('#frais').innerHTML = 'Mis à jour<br>' + quandTexte(data.genere);
 
-  // Agenda : rendez-vous à venir, triés
+  // Agenda : rendez-vous à venir, triés (on masque les supprimés).
+  // Kosméo range date + heure séparément ; on reconstruit une date pour trier.
+  const dateEvt = e => e.date ? new Date(e.date + 'T' + (e.heure || '00:00')) : null;
   const evts = (data.agenda || [])
-    .filter(e => e.quand && new Date(e.quand) >= new Date(Date.now() - 12*3600*1000))
-    .sort((a,b) => new Date(a.quand) - new Date(b.quand)).slice(0, 30);
+    .filter(e => !e.supprime && e.date)
+    .map(e => Object.assign({ _d: dateEvt(e) }, e))
+    .filter(e => e._d && !isNaN(e._d) && e._d >= new Date(Date.now() - 12*3600*1000))
+    .sort((a,b) => a._d - b._d).slice(0, 30);
   const za = $('#liste-agenda');
-  if (!evts.length) { za.innerHTML = '<div class="vide">Aucun rendez-vous à venir.</div>'; }
+  if (!evts.length) { za.innerHTML = '<div class="vide">Aucun rendez-vous à venir. Ajoutez-en un ci-dessus.</div>'; }
   else za.innerHTML = evts.map(e => {
-    const d = new Date(e.quand);
-    const heure = (d.getHours() || d.getMinutes())
+    const d = e._d;
+    const heure = e.heure
       ? String(d.getHours()).padStart(2,'0')+' h '+String(d.getMinutes()).padStart(2,'0') : '';
-    return '<div class="carte evt"><div class="quand"><div class="jour">'+d.getDate()+
+    return '<div class="carte evt" data-id="'+echap(String(e.id))+'"><div class="quand"><div class="jour">'+d.getDate()+
       '</div><div class="mois">'+MOIS[d.getMonth()]+'</div>'+
       (heure?'<div class="heure">'+heure+'</div>':'')+'</div>'+
-      '<div><div class="quoi">'+echap(e.titre||'Rendez-vous')+'</div>'+
-      (e.note?'<div class="note">'+echap(e.note)+'</div>':'')+'</div></div>';
+      '<div class="evt-corps"><div class="quoi">'+echap(e.titre||'Rendez-vous')+'</div>'+
+      (e.note?'<div class="note">'+echap(e.note)+'</div>':'')+'</div>'+
+      '<button class="evt-x" data-act="suppr-evt" aria-label="Supprimer">✕</button></div>';
   }).join('');
 
-  // Budget : totaux du mois courant + opérations récentes
+  // Budget : totaux du mois courant + opérations récentes (on masque les supprimées)
   const now = new Date(), moisCourant = now.toISOString().slice(0,7);
-  const lignes = (data.budget || []).filter(l => (l.date||'').slice(0,7) === moisCourant);
+  const budgetVivant = (data.budget || []).filter(l => !l.supprime);
+  const lignes = budgetVivant.filter(l => (l.date||'').slice(0,7) === moisCourant);
   const rentre = lignes.filter(l=>l.revenu).reduce((s,l)=>s+(+l.montant||0),0);
   const depense = lignes.filter(l=>!l.revenu).reduce((s,l)=>s+(+l.montant||0),0);
   $('#bud-rentre').textContent = euros(rentre);
   $('#bud-depense').textContent = euros(depense);
-  const recentes = [...(data.budget||[])].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,25);
+  const recentes = [...budgetVivant].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,25);
   const zb = $('#liste-budget');
-  if (!recentes.length) { zb.innerHTML = '<div class="vide">Aucune opération. Importez un relevé sur votre ordinateur.</div>'; }
+  if (!recentes.length) { zb.innerHTML = '<div class="vide">Aucune opération. Ajoutez-en une ci-dessus ou importez un relevé sur votre ordinateur.</div>'; }
   else zb.innerHTML = recentes.map(l => {
     const j = (l.date||'').slice(8,10)+'/'+(l.date||'').slice(5,7);
     const cls = l.revenu ? 'vert' : 'rouge';
-    return '<div class="ope"><span class="date">'+j+'</span>'+
+    return '<div class="ope" data-id="'+echap(String(l.id))+'"><span class="date">'+j+'</span>'+
       '<span class="lib">'+echap(l.libelle||'')+' <span class="cat">'+echap(l.categorie||'')+'</span></span>'+
-      '<span class="mt '+cls+'">'+(l.revenu?'+':'−')+euros(l.montant)+'</span></div>';
+      '<span class="mt '+cls+'">'+(l.revenu?'+':'−')+euros(l.montant)+'</span>'+
+      '<button class="ope-x" data-act="suppr-ope" aria-label="Supprimer">✕</button></div>';
   }).join('');
 
   // Tâches : on masque les supprimées (tombstones), non faites d'abord
@@ -456,6 +547,46 @@ function supprimerTacheTel(id) {
   if (!t) return;
   t.supprime = true; t.modifie = Date.now();
   syncTaches();
+}
+
+/* ---------- modifs de budget sur le téléphone ---------- */
+function ajouterOpeTel(montant, libelle, revenu) {
+  montant = Math.abs(parseFloat(String(montant).replace(',', '.'))) || 0;
+  libelle = (libelle||'').trim();
+  if (!montant || !DATA) return;
+  if (!Array.isArray(DATA.budget)) DATA.budget = [];
+  DATA.budget.push({
+    id: nouvelId(),
+    date: new Date().toISOString().slice(0,10),
+    montant, libelle: libelle || (revenu ? 'Rentrée' : 'Dépense'),
+    categorie: revenu ? 'Revenu' : 'Ajout téléphone',
+    revenu: !!revenu, modifie: Date.now()
+  });
+  syncMaintenant();
+}
+function supprimerOpeTel(id) {
+  const l = (DATA.budget||[]).find(x => String(x.id) === String(id));
+  if (!l) return;
+  l.supprime = true; l.modifie = Date.now();
+  syncMaintenant();
+}
+
+/* ---------- modifs d'agenda sur le téléphone ---------- */
+function ajouterRdvTel(titre, date, heure) {
+  titre = (titre||'').trim();
+  if (!titre || !date || !DATA) return;
+  if (!Array.isArray(DATA.agenda)) DATA.agenda = [];
+  DATA.agenda.push({
+    id: nouvelId(), titre, date, heure: (heure||'').trim(),
+    note: '', rappele: false, modifie: Date.now()
+  });
+  syncMaintenant();
+}
+function supprimerRdvTel(id) {
+  const e = (DATA.agenda||[]).find(x => String(x.id) === String(id));
+  if (!e) return;
+  e.supprime = true; e.modifie = Date.now();
+  syncMaintenant();
 }
 
 /* ---------- chargement (fichier frais de Drive, sinon dernier connu hors-ligne) ---------- */
@@ -568,11 +699,53 @@ $('#liste-taches').addEventListener('click', e => {
   else if (act === 'cocher') cocherTacheTel(id);
 });
 
+// Budget : bascule Dépense / Rentrée
+let budSens = 'depense';
+document.querySelectorAll('.bud-sens .sens').forEach(b => b.addEventListener('click', () => {
+  budSens = b.dataset.sens;
+  document.querySelectorAll('.bud-sens .sens').forEach(x => x.classList.toggle('actif', x === b));
+}));
+$('#bud-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const m = $('#bud-montant'), l = $('#bud-libelle');
+  ajouterOpeTel(m.value, l.value, budSens === 'revenu');
+  m.value = ''; l.value = '';
+});
+$('#liste-budget').addEventListener('click', e => {
+  if (e.target.dataset.act !== 'suppr-ope') return;
+  const ligne = e.target.closest('.ope'); if (!ligne) return;
+  supprimerOpeTel(ligne.dataset.id);
+});
+
+// Agenda : ajout d'un rendez-vous + suppression
+$('#rdv-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const t = $('#rdv-titre'), d = $('#rdv-date'), h = $('#rdv-heure');
+  ajouterRdvTel(t.value, d.value, h.value);
+  t.value = ''; d.value = ''; h.value = '';
+});
+$('#liste-agenda').addEventListener('click', e => {
+  if (e.target.dataset.act !== 'suppr-evt') return;
+  const carte = e.target.closest('.evt'); if (!carte) return;
+  supprimerRdvTel(carte.dataset.id);
+});
+
 async function demarrerAppli() {
   $('#appairage').style.display = 'none';
   $('#appli').style.display = 'flex';
   await charger(localStorage.getItem('kosmeo_code'));
 }
+
+// Animation de démarrage : on la retire en douceur après ~1,6 s (l'appli est
+// déjà prête dessous). prefers-reduced-motion : on écourte.
+(function () {
+  const splash = $('#splash'); if (!splash) return;
+  const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setTimeout(() => {
+    splash.classList.add('parti');
+    setTimeout(() => splash.remove(), 600);
+  }, reduit ? 350 : 1600);
+})();
 
 // au lancement : déjà appairé ? on attend que Google soit prêt puis on charge.
 if (localStorage.getItem('kosmeo_code')) attendreGoogle().then(demarrerAppli);
