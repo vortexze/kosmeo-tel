@@ -107,6 +107,29 @@
   .evt-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
   .rdv-quand{display:flex; gap:9px}
   .rdv-quand #rdv-date{flex:1} .rdv-quand #rdv-heure{width:120px; flex-shrink:0}
+  /* calendrier du mois */
+  .cal-tete{display:flex; align-items:center; gap:8px; margin-bottom:12px}
+  .cal-nav{width:38px; height:38px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); font-size:20px; cursor:pointer; flex-shrink:0; line-height:1}
+  .cal-nav:active{background:var(--panel2)}
+  #cal-mois{flex:1; text-align:center; font-size:16px; text-transform:capitalize}
+  .cal-auj{padding:9px 12px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--accent2); font-family:inherit; font-size:13px; cursor:pointer; flex-shrink:0}
+  .cal-auj:active{background:var(--panel2)}
+  .cal-sem{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px}
+  .cal-sem span{text-align:center; color:var(--muted); font-size:11px}
+  .cal-grille{display:grid; grid-template-columns:repeat(7,1fr); gap:4px}
+  .cal-case{aspect-ratio:1/1.1; border:1px solid var(--border); border-radius:9px; background:var(--panel);
+    padding:4px 2px 2px; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer}
+  .cal-case.vide{border:none; background:none; cursor:default}
+  .cal-case .n{font-size:12.5px; color:var(--text)}
+  .cal-case.auj{border-color:var(--accent2)}
+  .cal-case.auj .n{color:var(--accent2); font-weight:700}
+  .cal-case.sel{background:rgba(16,185,129,.16); border-color:var(--accent)}
+  .cal-pts{display:flex; gap:3px; flex-wrap:wrap; justify-content:center; min-height:6px}
+  .cal-pt{width:5px; height:5px; border-radius:50%; background:var(--accent2)}
+  #cal-jour{margin-top:18px; display:flex; flex-direction:column; gap:12px}
+  .cal-jour-titre{font-size:15px; font-weight:500; text-transform:capitalize}
 
   /* budget */
   .bud-resume{display:flex; gap:11px; margin-bottom:14px}
@@ -115,6 +138,18 @@
   .bud-case .lib{font-size:12.5px; color:var(--muted)}
   .bud-case .val{font-size:22px; font-weight:700; font-family:Bahnschrift,sans-serif; margin-top:3px}
   .val.vert{color:var(--ok)} .val.rouge{color:var(--danger)}
+  .bud-reste{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+    background:var(--panel); border:1px solid var(--border); border-radius:15px; padding:13px 16px}
+  .bud-reste span{color:var(--muted); font-size:14px}
+  .bud-reste b{font-size:20px; font-family:Bahnschrift,sans-serif}
+  .bud-reste b.vert{color:var(--ok)} .bud-reste b.rouge{color:var(--danger)}
+  .bud-sous-titre{font-size:14px; font-weight:500; margin:4px 0 10px}
+  .repar{margin-bottom:10px}
+  .repar-tete{display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:4px}
+  .repar-tete b{font-weight:600}
+  .repar-barre{height:7px; border-radius:4px; background:var(--panel); overflow:hidden}
+  .repar-barre div{height:100%; border-radius:4px; background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  #bud-repartition{margin-bottom:18px}
   .ope{display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border)}
   .ope:last-child{border-bottom:none}
   .ope .date{width:44px; color:var(--muted); font-size:13px; flex-shrink:0}
@@ -143,6 +178,32 @@
   .tache-x{margin-left:10px; background:none; border:none; color:var(--muted); font-size:17px;
     cursor:pointer; padding:4px 8px; border-radius:8px; flex-shrink:0}
   .tache-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
+
+  /* notes */
+  #liste-notes{display:flex; flex-direction:column; gap:11px}
+  .note-carte{background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:13px 15px; cursor:pointer}
+  .note-carte:active{background:var(--panel2)}
+  .note-titre{font-weight:600; display:flex; align-items:center; gap:7px}
+  .note-titre svg{width:15px; height:15px; stroke:var(--accent2); stroke-width:2; fill:none; flex-shrink:0}
+  .note-apercu{color:var(--muted); font-size:14px; margin-top:3px; line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+  .note-date{color:var(--muted); font-size:12px; margin-top:6px}
+  /* éditeur de note plein écran */
+  #note-editeur{position:fixed; inset:0; z-index:400; background:var(--bg);
+    display:none; flex-direction:column;
+    padding:calc(12px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom))}
+  #note-editeur.ouvert{display:flex}
+  .ne-tete{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+  #ne-retour{background:none; border:none; color:var(--accent2); font-family:inherit; font-size:16px; cursor:pointer; padding:6px 4px}
+  #ne-suppr{background:none; border:none; color:var(--danger); font-family:inherit; font-size:14px; cursor:pointer; padding:6px 8px; border-radius:8px}
+  #ne-suppr:active{background:rgba(239,68,102,.18)}
+  #ne-titre{border:none; background:none; color:var(--text); font-size:22px; font-weight:600;
+    font-family:inherit; outline:none; padding:6px 0; margin-bottom:8px}
+  #ne-corps{flex:1; overflow-y:auto; color:var(--text); font-size:16px; line-height:1.6;
+    outline:none; -webkit-user-select:text; user-select:text}
+  #ne-corps:empty::before{content:attr(data-vide); color:var(--muted)}
+  #ne-corps img{max-width:100%; height:auto; border-radius:10px; margin:6px 0}
   /* ---------- Bouton + flottant ---------- */
   #fab{position:fixed; right:18px; z-index:200;
     bottom:calc(74px + env(safe-area-inset-bottom));   /* juste au-dessus de la barre */
@@ -267,16 +328,30 @@
     <div class="maj-note" id="maj-note" style="display:none"></div>
 
     <section class="page actif" id="page-agenda">
-      <h2 class="titre-page">Prochains rendez-vous</h2>
-      <div id="liste-agenda"></div>
+      <div class="cal-tete">
+        <button class="cal-nav" id="cal-prec" aria-label="Mois précédent">‹</button>
+        <b id="cal-mois">—</b>
+        <button class="cal-nav" id="cal-suiv" aria-label="Mois suivant">›</button>
+        <button class="cal-auj" id="cal-auj">Aujourd'hui</button>
+      </div>
+      <div class="cal-sem"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+      <div class="cal-grille" id="cal-grille"></div>
+      <div id="cal-jour"></div>
     </section>
 
     <section class="page" id="page-budget">
-      <h2 class="titre-page">Mon budget ce mois-ci</h2>
-      <div class="bud-resume">
-        <div class="bud-case"><div class="lib">Rentré</div><div class="val vert" id="bud-rentre">—</div></div>
-        <div class="bud-case"><div class="lib">Dépensé</div><div class="val rouge" id="bud-depense">—</div></div>
+      <div class="cal-tete">
+        <button class="cal-nav" id="bud-prec" aria-label="Mois précédent">‹</button>
+        <b id="bud-mois">—</b>
+        <button class="cal-nav" id="bud-suiv" aria-label="Mois suivant">›</button>
       </div>
+      <div class="bud-resume">
+        <div class="bud-case"><div class="lib">Revenus du mois</div><div class="val vert" id="bud-rentre">—</div></div>
+        <div class="bud-case"><div class="lib">Dépenses du mois</div><div class="val rouge" id="bud-depense">—</div></div>
+      </div>
+      <div class="bud-reste"><span>Il te reste</span><b id="bud-reste">—</b></div>
+      <div id="bud-repartition"></div>
+      <div class="bud-sous-titre">Toutes les opérations du mois</div>
       <div class="carte" id="liste-budget"></div>
     </section>
 
@@ -284,7 +359,22 @@
       <h2 class="titre-page">Mes tâches</h2>
       <div class="carte" id="liste-taches"></div>
     </section>
+
+    <section class="page" id="page-notes">
+      <h2 class="titre-page">Mes notes</h2>
+      <div id="liste-notes"></div>
+    </section>
   </main>
+
+  <!-- Éditeur de note plein écran -->
+  <div id="note-editeur">
+    <div class="ne-tete">
+      <button id="ne-retour">‹ Retour</button>
+      <button id="ne-suppr" aria-label="Supprimer la note">Supprimer</button>
+    </div>
+    <input id="ne-titre" placeholder="Titre de la note">
+    <div id="ne-corps" contenteditable="true" data-vide="Écrivez votre note ici…"></div>
+  </div>
 
   <!-- Bouton + flottant : ouvre le formulaire d'ajout de l'onglet en cours -->
   <button id="fab" aria-label="Ajouter">+</button>
@@ -332,12 +422,16 @@
     <button data-page="taches">
       <svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>
       Tâches</button>
+    <button data-page="notes">
+      <svg viewBox="0 0 24 24"><path d="M6 3h8l5 5v12a1 1 0 01-1 1H6a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5M9 13h6M9 16.5h4"/></svg>
+      Notes</button>
   </nav>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
 const MOIS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+const MOIS_LONG = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 
 /* ---------- déchiffrement (Web Crypto, identique à sync.py côté PC) ---------- */
 async function dechiffrer(buf, code) {
@@ -370,8 +464,9 @@ async function chiffrer(donnees, code) {
 }
 
 /* ---------- fusion par id (identique au PC : la version la plus récente gagne) ---------- */
-function fusionnerParId(locale, distante) {
-  const ts = x => x.modifie || 0;
+function fusionnerParId(locale, distante, cle) {
+  cle = cle || 'modifie';
+  const ts = x => x[cle] || 0;
   const parId = {};
   for (const item of [...(locale || []), ...(distante || [])]) {
     if (item.id == null) continue;
@@ -416,6 +511,7 @@ async function syncMaintenant() {
       DATA.taches = fusionnerParId(DATA.taches || [], distant.taches || []);
       DATA.budget = fusionnerParId(DATA.budget || [], distant.budget || []);
       DATA.agenda = fusionnerParId(DATA.agenda || [], distant.agenda || []);
+      DATA.notes = fusionnerParId(DATA.notes || [], distant.notes || [], 'modifie_ms');
       DATA.recurrents = distant.recurrents; DATA.previsionnel = distant.previsionnel;
     }
     await driveDeposer(await chiffrer(DATA, CODE));
@@ -493,51 +589,182 @@ const euros = n => (Number(n)||0).toLocaleString('fr-FR',{minimumFractionDigits:
 const echap = t => { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; };
 
 /* ---------- affichage ---------- */
-function rendre(data) {
-  DATA = data;
-  $('#frais').innerHTML = 'Mis à jour<br>' + quandTexte(data.genere);
+/* ---------- Agenda : calendrier du mois (présentation de l'ordinateur) ---------- */
+let calMois = null;   // { a: année, m: mois 0-11 } actuellement affiché
+let calSel = null;    // 'AAAA-MM-JJ' du jour sélectionné
+const isoLocal = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+function evtsParJour() {
+  const p = {};
+  (DATA && DATA.agenda || []).forEach(e => {
+    if (e.supprime || !e.date) return;
+    (p[e.date] = p[e.date] || []).push(e);
+  });
+  return p;
+}
+function rendreAgenda() {
+  if (!DATA) return;
+  const auj = new Date();
+  if (!calMois) calMois = { a: auj.getFullYear(), m: auj.getMonth() };
+  if (!calSel) calSel = isoLocal(auj);
+  const { a, m } = calMois;
+  $('#cal-mois').textContent = MOIS_LONG[m] + ' ' + a;
+  const parJour = evtsParJour();
+  const ajd = isoLocal(auj);
+  const avant = (new Date(a, m, 1).getDay() + 6) % 7;   // lundi = 0
+  const nbJours = new Date(a, m+1, 0).getDate();
+  let html = '';
+  for (let i = 0; i < avant; i++) html += '<div class="cal-case vide"></div>';
+  for (let j = 1; j <= nbJours; j++) {
+    const iso = a + '-' + String(m+1).padStart(2,'0') + '-' + String(j).padStart(2,'0');
+    const nb = (parJour[iso] || []).length;
+    const pts = '<span class="cal-pt"></span>'.repeat(Math.min(nb, 3));
+    const cls = 'cal-case' + (iso === ajd ? ' auj' : '') + (iso === calSel ? ' sel' : '');
+    html += '<div class="' + cls + '" data-jour="' + iso + '"><span class="n">' + j +
+            '</span><div class="cal-pts">' + pts + '</div></div>';
+  }
+  $('#cal-grille').innerHTML = html;
+  rendreJourSel(parJour);
+}
+function rendreJourSel(parJour) {
+  parJour = parJour || evtsParJour();
+  const evs = (parJour[calSel] || []).slice()
+    .sort((x, y) => (x.heure || '99:99').localeCompare(y.heure || '99:99'));
+  const d = new Date(calSel + 'T00:00');
+  let html = '<div class="cal-jour-titre">Rendez-vous du ' + d.getDate() + ' ' + MOIS[d.getMonth()] + '</div>';
+  if (!evs.length) {
+    html += '<div class="vide">Aucun rendez-vous ce jour. Touchez le bouton + pour en ajouter.</div>';
+  } else {
+    html += evs.map(e => {
+      const h = e.heure ? e.heure.replace(':', ' h ') : '—';
+      return '<div class="carte evt" data-id="' + echap(String(e.id)) + '">' +
+        '<div class="quand"><div class="heure">' + h + '</div></div>' +
+        '<div class="evt-corps"><div class="quoi">' + echap(e.titre || 'Rendez-vous') + '</div>' +
+        (e.note ? '<div class="note">' + echap(e.note) + '</div>' : '') + '</div>' +
+        '<button class="evt-x" data-act="suppr-evt" aria-label="Supprimer">✕</button></div>';
+    }).join('');
+  }
+  $('#cal-jour').innerHTML = html;
+}
 
-  // Agenda : rendez-vous à venir, triés (on masque les supprimés).
-  // Kosméo range date + heure séparément ; on reconstruit une date pour trier.
-  const dateEvt = e => e.date ? new Date(e.date + 'T' + (e.heure || '00:00')) : null;
-  const evts = (data.agenda || [])
-    .filter(e => !e.supprime && e.date)
-    .map(e => Object.assign({ _d: dateEvt(e) }, e))
-    .filter(e => e._d && !isNaN(e._d) && e._d >= new Date(Date.now() - 12*3600*1000))
-    .sort((a,b) => a._d - b._d).slice(0, 30);
-  const za = $('#liste-agenda');
-  if (!evts.length) { za.innerHTML = '<div class="vide">Aucun rendez-vous à venir. Ajoutez-en un ci-dessus.</div>'; }
-  else za.innerHTML = evts.map(e => {
-    const d = e._d;
-    const heure = e.heure
-      ? String(d.getHours()).padStart(2,'0')+' h '+String(d.getMinutes()).padStart(2,'0') : '';
-    return '<div class="carte evt" data-id="'+echap(String(e.id))+'"><div class="quand"><div class="jour">'+d.getDate()+
-      '</div><div class="mois">'+MOIS[d.getMonth()]+'</div>'+
-      (heure?'<div class="heure">'+heure+'</div>':'')+'</div>'+
-      '<div class="evt-corps"><div class="quoi">'+echap(e.titre||'Rendez-vous')+'</div>'+
-      (e.note?'<div class="note">'+echap(e.note)+'</div>':'')+'</div>'+
-      '<button class="evt-x" data-act="suppr-evt" aria-label="Supprimer">✕</button></div>';
-  }).join('');
-
-  // Budget : totaux du mois courant + opérations récentes (on masque les supprimées)
-  const now = new Date(), moisCourant = now.toISOString().slice(0,7);
-  const budgetVivant = (data.budget || []).filter(l => !l.supprime);
-  const lignes = budgetVivant.filter(l => (l.date||'').slice(0,7) === moisCourant);
+/* ---------- Budget : vue par mois (présentation de l'ordinateur) ---------- */
+let budMois = null;   // { a, m } mois affiché
+function rendreBudget() {
+  if (!DATA) return;
+  const now = new Date();
+  if (!budMois) budMois = { a: now.getFullYear(), m: now.getMonth() };
+  const { a, m } = budMois;
+  $('#bud-mois').textContent = MOIS_LONG[m] + ' ' + a;
+  const prefixe = a + '-' + String(m+1).padStart(2,'0');
+  const lignes = (DATA.budget || []).filter(l => !l.supprime && (l.date||'').slice(0,7) === prefixe);
   const rentre = lignes.filter(l=>l.revenu).reduce((s,l)=>s+(+l.montant||0),0);
   const depense = lignes.filter(l=>!l.revenu).reduce((s,l)=>s+(+l.montant||0),0);
   $('#bud-rentre').textContent = euros(rentre);
   $('#bud-depense').textContent = euros(depense);
-  const recentes = [...budgetVivant].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,25);
+  const reste = rentre - depense;
+  const br = $('#bud-reste');
+  br.textContent = (reste >= 0 ? '' : '−') + euros(Math.abs(reste));
+  br.className = reste >= 0 ? 'vert' : 'rouge';
+
+  // Où part ton argent : les plus grosses catégories de dépenses, avec barres
+  const parCat = {};
+  lignes.filter(l=>!l.revenu).forEach(l => {
+    const c = l.categorie || 'Autres';
+    parCat[c] = (parCat[c] || 0) + (+l.montant || 0);
+  });
+  const tops = Object.entries(parCat).sort((x,y) => y[1]-x[1]).slice(0, 5);
+  const maxCat = tops.length ? tops[0][1] : 1;
+  const zr = $('#bud-repartition');
+  zr.innerHTML = tops.length
+    ? '<div class="bud-sous-titre">Où part ton argent</div>' + tops.map(([c,v]) =>
+        '<div class="repar"><div class="repar-tete"><span>'+echap(c)+'</span><b>'+euros(v)+'</b></div>' +
+        '<div class="repar-barre"><div style="width:'+Math.round(v/maxCat*100)+'%"></div></div></div>').join('')
+    : '';
+
+  // Toutes les opérations du mois (plus récentes en haut)
+  const tri = [...lignes].sort((x,y) => (y.date||'').localeCompare(x.date||''));
   const zb = $('#liste-budget');
-  if (!recentes.length) { zb.innerHTML = '<div class="vide">Aucune opération. Ajoutez-en une ci-dessus ou importez un relevé sur votre ordinateur.</div>'; }
-  else zb.innerHTML = recentes.map(l => {
-    const j = (l.date||'').slice(8,10)+'/'+(l.date||'').slice(5,7);
-    const cls = l.revenu ? 'vert' : 'rouge';
-    return '<div class="ope" data-id="'+echap(String(l.id))+'"><span class="date">'+j+'</span>'+
-      '<span class="lib">'+echap(l.libelle||'')+' <span class="cat">'+echap(l.categorie||'')+'</span></span>'+
-      '<span class="mt '+cls+'">'+(l.revenu?'+':'−')+euros(l.montant)+'</span>'+
-      '<button class="ope-x" data-act="suppr-ope" aria-label="Supprimer">✕</button></div>';
+  zb.innerHTML = tri.length
+    ? tri.map(l => {
+        const j = (l.date||'').slice(8,10)+'/'+(l.date||'').slice(5,7);
+        const cls = l.revenu ? 'vert' : 'rouge';
+        return '<div class="ope" data-id="'+echap(String(l.id))+'"><span class="date">'+j+'</span>'+
+          '<span class="lib">'+echap(l.libelle||'')+' <span class="cat">'+echap(l.categorie||'')+'</span></span>'+
+          '<span class="mt '+cls+'">'+(l.revenu?'+':'−')+euros(l.montant)+'</span>'+
+          '<button class="ope-x" data-act="suppr-ope" aria-label="Supprimer">✕</button></div>';
+      }).join('')
+    : '<div class="vide">Aucune opération ce mois-ci. Touchez le bouton + pour en ajouter.</div>';
+}
+
+/* ---------- Notes (avec photos), présentation de l'ordinateur ---------- */
+let noteOuverteId = null;
+const _msNote = n => (typeof n.modifie_ms === 'number' ? n.modifie_ms : 0);
+const ICO_PHOTO = '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-4-4 4-2-2-4 3"/></svg>';
+function rendreNotes() {
+  if (!DATA) return;
+  const notes = (DATA.notes || []).filter(n => !n.supprimee)
+    .sort((a, b) => (b.epingle ? 1 : 0) - (a.epingle ? 1 : 0) || _msNote(b) - _msNote(a));
+  const z = $('#liste-notes');
+  if (!notes.length) {
+    z.innerHTML = '<div class="vide">Aucune note. Touchez le bouton + pour en créer une.</div>';
+    return;
+  }
+  z.innerHTML = notes.map(n => {
+    const texte = (n.contenu || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    const photo = /<img/i.test(n.contenu || '') ? ICO_PHOTO : '';
+    return '<div class="note-carte" data-id="' + echap(String(n.id)) + '">' +
+      '<div class="note-titre">' + echap(n.titre || 'Sans titre') + photo + '</div>' +
+      (texte ? '<div class="note-apercu">' + echap(texte.slice(0, 140)) + '</div>' : '') +
+      '<div class="note-date">' + echap(n.modifie || '') + '</div></div>';
   }).join('');
+}
+function ouvrirNote(id) {
+  noteOuverteId = id;
+  const note = id ? (DATA.notes || []).find(n => String(n.id) === String(id)) : null;
+  if (id && !note) return;
+  $('#ne-titre').value = note ? (note.titre || '') : '';
+  $('#ne-corps').innerHTML = note ? (note.contenu || '') : '';
+  $('#ne-suppr').style.display = id ? '' : 'none';
+  $('#note-editeur').classList.add('ouvert');
+  if (!id) setTimeout(() => $('#ne-titre').focus(), 100);
+}
+function fermerNote() {
+  $('#note-editeur').classList.remove('ouvert');
+  noteOuverteId = null;
+}
+function enregistrerNote() {
+  const titre = $('#ne-titre').value.trim();
+  const contenu = $('#ne-corps').innerHTML;
+  const vide = !titre && !contenu.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '').trim() && !/<img/i.test(contenu);
+  if (vide) { fermerNote(); return; }   // note vide : on ne crée rien
+  const ms = Date.now();
+  const d = new Date();
+  const dstr = d.toLocaleDateString('fr-FR') + ' ' +
+    String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  if (!Array.isArray(DATA.notes)) DATA.notes = [];
+  const note = noteOuverteId ? DATA.notes.find(n => String(n.id) === String(noteOuverteId)) : null;
+  if (note) {
+    note.titre = titre; note.contenu = contenu; note.modifie = dstr; note.modifie_ms = ms;
+  } else {
+    DATA.notes.push({ id: 'n' + ms + '-' + Math.random().toString(36).slice(2, 6),
+      titre, contenu, format: 'html', modifie: dstr, modifie_ms: ms });
+  }
+  fermerNote();
+  syncMaintenant();
+}
+function supprimerNoteTel() {
+  const n = (DATA.notes || []).find(x => String(x.id) === String(noteOuverteId));
+  if (n) { n.supprimee = true; n.modifie_ms = Date.now(); }
+  fermerNote();
+  syncMaintenant();
+}
+
+function rendre(data) {
+  DATA = data;
+  $('#frais').innerHTML = 'Mis à jour<br>' + quandTexte(data.genere);
+
+  rendreAgenda();   // calendrier du mois (comme sur l'ordinateur)
+  rendreBudget();   // budget du mois (comme sur l'ordinateur)
+  rendreNotes();    // notes (avec photos), comme sur l'ordinateur
 
   // Tâches : on masque les supprimées (tombstones), non faites d'abord
   const taches = (data.taches||[]).filter(t=>!t.supprime).sort((a,b)=>(a.fait?1:0)-(b.fait?1:0));
@@ -720,8 +947,10 @@ function pageActive() {
 }
 function ouvrirFeuille() {
   const page = pageActive();
+  if (page === 'notes') { ouvrirNote(null); return; }   // les notes ont leur propre éditeur
   $('#feuille-titre').textContent = TITRES_AJOUT[page] || 'Ajouter';
   document.querySelectorAll('.form-feuille').forEach(f => f.classList.toggle('actif', f.dataset.pour === page));
+  if (page === 'agenda' && calSel) $('#rdv-date').value = calSel;   // pré-remplit le jour choisi
   $('#feuille-fond').classList.add('ouvert');
   $('#feuille').classList.add('ouvert');
   const prem = document.querySelector('.form-feuille.actif input');
@@ -778,11 +1007,48 @@ $('#rdv-form').addEventListener('submit', e => {
   t.value = ''; d.value = ''; h.value = '';
   fermerFeuille();
 });
-$('#liste-agenda').addEventListener('click', e => {
+$('#cal-jour').addEventListener('click', e => {
   if (e.target.dataset.act !== 'suppr-evt') return;
   const carte = e.target.closest('.evt'); if (!carte) return;
   supprimerRdvTel(carte.dataset.id);
 });
+// Navigation du calendrier
+$('#cal-prec').addEventListener('click', () => {
+  if (--calMois.m < 0) { calMois.m = 11; calMois.a--; }
+  rendreAgenda();
+});
+$('#cal-suiv').addEventListener('click', () => {
+  if (++calMois.m > 11) { calMois.m = 0; calMois.a++; }
+  rendreAgenda();
+});
+$('#cal-auj').addEventListener('click', () => {
+  const n = new Date();
+  calMois = { a: n.getFullYear(), m: n.getMonth() };
+  calSel = isoLocal(n);
+  rendreAgenda();
+});
+$('#cal-grille').addEventListener('click', e => {
+  const c = e.target.closest('.cal-case');
+  if (!c || c.classList.contains('vide')) return;
+  calSel = c.dataset.jour;
+  rendreAgenda();
+});
+// Navigation par mois du budget
+$('#bud-prec').addEventListener('click', () => {
+  if (--budMois.m < 0) { budMois.m = 11; budMois.a--; }
+  rendreBudget();
+});
+$('#bud-suiv').addEventListener('click', () => {
+  if (++budMois.m > 11) { budMois.m = 0; budMois.a++; }
+  rendreBudget();
+});
+// Notes : ouvrir une note, revenir (= enregistrer), supprimer
+$('#liste-notes').addEventListener('click', e => {
+  const carte = e.target.closest('.note-carte'); if (!carte) return;
+  ouvrirNote(carte.dataset.id);
+});
+$('#ne-retour').addEventListener('click', enregistrerNote);
+$('#ne-suppr').addEventListener('click', supprimerNoteTel);
 
 async function demarrerAppli() {
   $('#appairage').style.display = 'none';
