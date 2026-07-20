@@ -105,14 +105,8 @@
   .evt-x{background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer;
     padding:4px 8px; border-radius:8px; flex-shrink:0; align-self:center}
   .evt-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
-  .rdv-ajout{display:flex; flex-direction:column; gap:9px; margin-bottom:16px}
-  .rdv-ajout input{padding:13px 14px; border-radius:12px; border:1px solid var(--border);
-    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none; min-width:0}
-  .rdv-ajout input:focus{border-color:var(--accent)}
   .rdv-quand{display:flex; gap:9px}
   .rdv-quand #rdv-date{flex:1} .rdv-quand #rdv-heure{width:120px; flex-shrink:0}
-  .rdv-ajout button{padding:13px; border:none; border-radius:12px; font-size:15.5px; font-weight:600;
-    color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent2)); cursor:pointer; font-family:inherit}
 
   /* budget */
   .bud-resume{display:flex; gap:11px; margin-bottom:14px}
@@ -131,19 +125,11 @@
   .ope-x{margin-left:6px; background:none; border:none; color:var(--muted); font-size:15px;
     cursor:pointer; padding:4px 6px; border-radius:8px; flex-shrink:0}
   .ope-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
-  .bud-ajout{margin-bottom:14px}
-  .bud-sens{display:flex; gap:8px; margin-bottom:9px}
-  .bud-sens .sens{flex:1; padding:9px; border-radius:11px; border:1px solid var(--border);
-    background:var(--panel); color:var(--muted); font-family:inherit; font-size:14.5px; cursor:pointer}
+  .bud-sens{display:flex; gap:8px}
+  .bud-sens .sens{flex:1; padding:11px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--muted); font-family:inherit; font-size:15px; cursor:pointer}
   .bud-sens .sens.actif[data-sens="depense"]{background:rgba(239,68,102,.15); border-color:var(--danger); color:var(--danger)}
   .bud-sens .sens.actif[data-sens="revenu"]{background:rgba(52,211,153,.15); border-color:var(--ok); color:var(--ok)}
-  .bud-champs{display:flex; gap:9px}
-  .bud-champs input{padding:13px 14px; border-radius:12px; border:1px solid var(--border);
-    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none; min-width:0}
-  .bud-champs input:focus{border-color:var(--accent)}
-  #bud-montant{width:110px; flex-shrink:0} #bud-libelle{flex:1}
-  .bud-champs button{width:50px; border:none; border-radius:12px; font-size:24px; font-weight:600;
-    color:#fff; background:linear-gradient(135deg,#10b981,#34d399); cursor:pointer; flex-shrink:0}
 
   /* tâches */
   .tache{display:flex; gap:12px; align-items:center; padding:13px 0; border-bottom:1px solid var(--border)}
@@ -157,12 +143,39 @@
   .tache-x{margin-left:10px; background:none; border:none; color:var(--muted); font-size:17px;
     cursor:pointer; padding:4px 8px; border-radius:8px; flex-shrink:0}
   .tache-x:active{background:rgba(239,68,102,.18); color:var(--danger)}
-  .tache-ajout{display:flex; gap:10px; margin-bottom:14px}
-  .tache-ajout input{flex:1; padding:14px 16px; border-radius:13px; border:1px solid var(--border);
-    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none}
-  .tache-ajout input:focus{border-color:var(--accent)}
-  .tache-ajout button{width:52px; border:none; border-radius:13px; font-size:26px; font-weight:600;
-    color:#fff; background:linear-gradient(135deg,#10b981,#34d399); cursor:pointer; flex-shrink:0}
+  /* ---------- Bouton + flottant ---------- */
+  #fab{position:fixed; right:18px; z-index:200;
+    bottom:calc(74px + env(safe-area-inset-bottom));   /* juste au-dessus de la barre */
+    width:60px; height:60px; border-radius:50%; border:none; cursor:pointer;
+    font-size:34px; line-height:1; color:#fff; font-weight:400;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 8px 22px rgba(16,185,129,.45); transition:transform .12s ease}
+  #fab:active{transform:scale(.92)}
+
+  /* ---------- Panneau d'ajout (monte du bas) ---------- */
+  #feuille-fond{position:fixed; inset:0; z-index:210; background:rgba(0,0,0,.5);
+    opacity:0; pointer-events:none; transition:opacity .25s ease}
+  #feuille-fond.ouvert{opacity:1; pointer-events:auto}
+  #feuille{position:fixed; left:0; right:0; bottom:0; z-index:220;
+    background:var(--panel2); border-radius:22px 22px 0 0; border-top:1px solid var(--border);
+    padding:20px 20px calc(24px + env(safe-area-inset-bottom));
+    transform:translateY(105%); transition:transform .28s cubic-bezier(.2,.8,.2,1);
+    max-width:520px; margin:0 auto}
+  #feuille.ouvert{transform:translateY(0)}
+  .feuille-tete{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px}
+  #feuille-titre{font-size:19px}
+  #feuille-x{background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer;
+    padding:4px 8px; border-radius:8px}
+  #feuille-x:active{background:var(--panel)}
+  .form-feuille{display:none; flex-direction:column; gap:11px}
+  .form-feuille.actif{display:flex}
+  .form-feuille input{padding:14px 15px; border-radius:12px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); font-size:16px; font-family:inherit; outline:none; min-width:0}
+  .form-feuille input:focus{border-color:var(--accent)}
+  .form-feuille > button[type="submit"]{padding:15px; border:none; border-radius:13px;
+    font-size:16px; font-weight:700; color:#fff; cursor:pointer; font-family:inherit; margin-top:3px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .form-feuille > button[type="submit"]:active{filter:brightness(.94)}
 
   /* barre de navigation */
   nav{position:fixed; bottom:0; left:0; right:0; display:flex;
@@ -255,14 +268,6 @@
 
     <section class="page actif" id="page-agenda">
       <h2 class="titre-page">Prochains rendez-vous</h2>
-      <form id="rdv-form" class="rdv-ajout">
-        <input id="rdv-titre" type="text" placeholder="Ex : Rendez-vous dentiste" maxlength="80">
-        <div class="rdv-quand">
-          <input id="rdv-date" type="date">
-          <input id="rdv-heure" type="time">
-        </div>
-        <button type="submit">Ajouter le rendez-vous</button>
-      </form>
       <div id="liste-agenda"></div>
     </section>
 
@@ -272,29 +277,50 @@
         <div class="bud-case"><div class="lib">Rentré</div><div class="val vert" id="bud-rentre">—</div></div>
         <div class="bud-case"><div class="lib">Dépensé</div><div class="val rouge" id="bud-depense">—</div></div>
       </div>
-      <form id="bud-form" class="bud-ajout">
-        <div class="bud-sens">
-          <button type="button" class="sens actif" data-sens="depense">Dépense</button>
-          <button type="button" class="sens" data-sens="revenu">Rentrée</button>
-        </div>
-        <div class="bud-champs">
-          <input id="bud-montant" type="text" inputmode="decimal" placeholder="Montant €">
-          <input id="bud-libelle" type="text" placeholder="Ex : Courses, Essence…" maxlength="60">
-          <button type="submit" aria-label="Ajouter">+</button>
-        </div>
-      </form>
       <div class="carte" id="liste-budget"></div>
     </section>
 
     <section class="page" id="page-taches">
       <h2 class="titre-page">Mes tâches</h2>
-      <form id="tache-form" class="tache-ajout">
-        <input id="tache-champ" type="text" placeholder="Ajouter une tâche…" autocomplete="off" maxlength="120">
-        <button type="submit" aria-label="Ajouter">+</button>
-      </form>
       <div class="carte" id="liste-taches"></div>
     </section>
   </main>
+
+  <!-- Bouton + flottant : ouvre le formulaire d'ajout de l'onglet en cours -->
+  <button id="fab" aria-label="Ajouter">+</button>
+
+  <!-- Panneau d'ajout qui monte du bas -->
+  <div id="feuille-fond"></div>
+  <div id="feuille" role="dialog" aria-modal="true">
+    <div class="feuille-tete">
+      <b id="feuille-titre">Ajouter</b>
+      <button id="feuille-x" aria-label="Fermer">✕</button>
+    </div>
+
+    <form id="rdv-form" class="form-feuille" data-pour="agenda">
+      <input id="rdv-titre" type="text" placeholder="Ex : Rendez-vous dentiste" maxlength="80">
+      <div class="rdv-quand">
+        <input id="rdv-date" type="date">
+        <input id="rdv-heure" type="time">
+      </div>
+      <button type="submit">Ajouter le rendez-vous</button>
+    </form>
+
+    <form id="bud-form" class="form-feuille" data-pour="budget">
+      <div class="bud-sens">
+        <button type="button" class="sens actif" data-sens="depense">Dépense</button>
+        <button type="button" class="sens" data-sens="revenu">Rentrée</button>
+      </div>
+      <input id="bud-montant" type="text" inputmode="decimal" placeholder="Montant €">
+      <input id="bud-libelle" type="text" placeholder="Ex : Courses, Essence…" maxlength="60">
+      <button type="submit">Ajouter</button>
+    </form>
+
+    <form id="tache-form" class="form-feuille" data-pour="taches">
+      <input id="tache-champ" type="text" placeholder="Ex : Appeler le médecin" autocomplete="off" maxlength="120">
+      <button type="submit">Ajouter la tâche</button>
+    </form>
+  </div>
 
   <nav>
     <button class="actif" data-page="agenda">
@@ -683,7 +709,32 @@ document.querySelectorAll('nav button').forEach(b => b.addEventListener('click',
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('actif'));
   b.classList.add('actif');
   $('#page-'+b.dataset.page).classList.add('actif');
+  fermerFeuille();   // on referme le panneau d'ajout si on change d'onglet
 }));
+
+/* ---------- Bouton + flottant → panneau d'ajout de l'onglet en cours ---------- */
+const TITRES_AJOUT = { agenda:'Nouveau rendez-vous', budget:'Nouvelle opération', taches:'Nouvelle tâche' };
+function pageActive() {
+  const p = document.querySelector('.page.actif');
+  return p ? p.id.replace('page-', '') : 'agenda';
+}
+function ouvrirFeuille() {
+  const page = pageActive();
+  $('#feuille-titre').textContent = TITRES_AJOUT[page] || 'Ajouter';
+  document.querySelectorAll('.form-feuille').forEach(f => f.classList.toggle('actif', f.dataset.pour === page));
+  $('#feuille-fond').classList.add('ouvert');
+  $('#feuille').classList.add('ouvert');
+  const prem = document.querySelector('.form-feuille.actif input');
+  if (prem) setTimeout(() => prem.focus(), 300);
+}
+function fermerFeuille() {
+  $('#feuille-fond').classList.remove('ouvert');
+  $('#feuille').classList.remove('ouvert');
+}
+$('#fab').addEventListener('click', ouvrirFeuille);
+$('#feuille-x').addEventListener('click', fermerFeuille);
+$('#feuille-fond').addEventListener('click', fermerFeuille);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fermerFeuille(); });
 
 /* ---------- modifs de tâches (téléphone) ---------- */
 $('#tache-form').addEventListener('submit', e => {
@@ -691,6 +742,7 @@ $('#tache-form').addEventListener('submit', e => {
   const champ = $('#tache-champ');
   ajouterTacheTel(champ.value);
   champ.value = '';
+  fermerFeuille();
 });
 $('#liste-taches').addEventListener('click', e => {
   const ligne = e.target.closest('.tache'); if (!ligne) return;
@@ -710,6 +762,7 @@ $('#bud-form').addEventListener('submit', e => {
   const m = $('#bud-montant'), l = $('#bud-libelle');
   ajouterOpeTel(m.value, l.value, budSens === 'revenu');
   m.value = ''; l.value = '';
+  fermerFeuille();
 });
 $('#liste-budget').addEventListener('click', e => {
   if (e.target.dataset.act !== 'suppr-ope') return;
@@ -723,6 +776,7 @@ $('#rdv-form').addEventListener('submit', e => {
   const t = $('#rdv-titre'), d = $('#rdv-date'), h = $('#rdv-heure');
   ajouterRdvTel(t.value, d.value, h.value);
   t.value = ''; d.value = ''; h.value = '';
+  fermerFeuille();
 });
 $('#liste-agenda').addEventListener('click', e => {
   if (e.target.dataset.act !== 'suppr-evt') return;
