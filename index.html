@@ -259,12 +259,12 @@
   #install .btn{margin-top:12px}
   #install .ios{color:var(--muted); font-size:14.5px; line-height:1.6}
   #install .ios b{color:var(--accent2)}
-  #install-app{display:flex; align-items:center; gap:12px;
+  #install-app,#notif-invite{display:flex; align-items:center; gap:12px;
     background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.4);
     border-radius:14px; padding:13px 15px; margin-bottom:14px}
-  #install-app b{color:var(--text)}
-  #install-app > div{flex:1}
-  #install-app-x{background:none; border:none; color:var(--muted); font-size:16px;
+  #install-app b,#notif-invite b{color:var(--text)}
+  #install-app > div,#notif-invite > div{flex:1}
+  #install-app-x,#notif-invite-x{background:none; border:none; color:var(--muted); font-size:16px;
     cursor:pointer; padding:4px 8px; flex-shrink:0}
 </style>
 </head>
@@ -326,6 +326,15 @@
       <button id="install-app-x" aria-label="Fermer">✕</button>
     </div>
     <div class="maj-note" id="maj-note" style="display:none"></div>
+
+    <div id="notif-invite" style="display:none">
+      <div>
+        <b>Être prévenu de vos rendez-vous</b>
+        <div id="notif-invite-txt" style="color:var(--muted); font-size:13.5px; margin-top:3px">Recevez une alerte sur ce téléphone, même quand vous êtes dehors.</div>
+      </div>
+      <button class="btn" id="btn-notif" style="width:auto; padding:11px 16px">Activer</button>
+      <button id="notif-invite-x" aria-label="Fermer">✕</button>
+    </div>
 
     <section class="page actif" id="page-agenda">
       <div class="cal-tete">
@@ -514,6 +523,9 @@ async function syncMaintenant() {
       DATA.notes = fusionnerParId(DATA.notes || [], distant.notes || [], 'modifie_ms');
       DATA.recurrents = distant.recurrents; DATA.previsionnel = distant.previsionnel;
     }
+    // On joint l'abonnement aux notifications pour que le PC puisse nous prévenir.
+    const abo = localStorage.getItem('kosmeo_push');
+    if (abo) { try { DATA.push = JSON.parse(abo); } catch (_) {} }
     await driveDeposer(await chiffrer(DATA, CODE));
     localStorage.setItem('kosmeo_cache', JSON.stringify(DATA));
     rendre(DATA);
@@ -1054,6 +1066,7 @@ async function demarrerAppli() {
   $('#appairage').style.display = 'none';
   $('#appli').style.display = 'flex';
   await charger(localStorage.getItem('kosmeo_code'));
+  afficherInviteNotif();   // propose d'activer les notifications si pertinent
 }
 
 // Animation de démarrage : on la retire en douceur après ~1,6 s (l'appli est
@@ -1080,6 +1093,52 @@ setInterval(() => { if (!document.hidden && estOuverte()) charger(CODE); }, 9000
 
 // service worker (installable + hors-ligne)
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+/* ---------- Notifications : le PC prévient le téléphone (Web Push) ---------- */
+const VAPID_PUBLIC = 'BArQ-u-mwJIVC9U5m_FjLFlPqbeAb1MCtZljxGsiDqZTbqdW9F4Bzz__15JM1q3_rVfOukoJKlpYxXSciS4pC8s';
+const pushDispo = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+function b64urlVersOctets(base64) {
+  const pad = '='.repeat((4 - base64.length % 4) % 4);
+  const b = (base64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+  const brut = atob(b);
+  return Uint8Array.from([...brut].map(c => c.charCodeAt(0)));
+}
+function afficherInviteNotif() {
+  // On propose seulement si c'est possible, pas déjà activé, pas déjà refusé/masqué.
+  if (!pushDispo || localStorage.getItem('kosmeo_push') || localStorage.getItem('notif_masque')) return;
+  if (Notification.permission === 'denied') return;
+  // Sur iPhone, il FAUT que l'appli soit ajoutée à l'écran d'accueil.
+  if (estIOS && !dejaInstallee) return;
+  $('#notif-invite').style.display = '';
+}
+function cacherInviteNotif() { const n = $('#notif-invite'); if (n) n.style.display = 'none'; }
+async function activerNotifs() {
+  if (!pushDispo) return;
+  if (estIOS && !dejaInstallee) {
+    $('#notif-invite-txt').textContent = "Ajoutez d'abord Kosméo à votre écran d'accueil, puis réessayez.";
+    return;
+  }
+  let perm;
+  try { perm = await Notification.requestPermission(); } catch (_) { return; }
+  if (perm !== 'granted') { cacherInviteNotif(); return; }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: b64urlVersOctets(VAPID_PUBLIC)
+      });
+    }
+    localStorage.setItem('kosmeo_push', JSON.stringify(sub.toJSON()));
+    cacherInviteNotif();
+    syncMaintenant();   // envoie l'abonnement au PC → il renverra un push de bienvenue
+  } catch (e) {
+    $('#notif-invite-txt').textContent = "Impossible d'activer les notifications sur ce téléphone.";
+  }
+}
+$('#btn-notif').addEventListener('click', activerNotifs);
+$('#notif-invite-x').addEventListener('click', () => { localStorage.setItem('notif_masque', '1'); cacherInviteNotif(); });
 
 /* ---------- « Installer sur l'écran d'accueil » (écran de connexion ET dans l'appli) ---------- */
 let promptInstall = null;

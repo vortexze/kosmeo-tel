@@ -4,7 +4,7 @@
    - Le fichier de données chiffré n'est JAMAIS mis en cache par le SW : c'est la
      page qui garde la dernière version (localStorage). On veut toujours essayer
      d'aller chercher le plus frais quand il y a du réseau. */
-const CACHE = 'kosmeo-mobile-v2';
+const CACHE = 'kosmeo-mobile-v3';
 const COQUILLE = ['./', './index.html', './manifest.webmanifest', './icone-192.png', './icone-512.png'];
 
 self.addEventListener('install', e => {
@@ -28,4 +28,29 @@ self.addEventListener('fetch', e => {
       return rep;
     }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
   );
+});
+
+/* Notification envoyée par le PC (Web Push) : on l'affiche, même appli fermée. */
+self.addEventListener('push', e => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; }
+  catch (_) { d = { titre: 'Kosméo', corps: (e.data && e.data.text()) || '' }; }
+  e.waitUntil(self.registration.showNotification(d.titre || 'Kosméo', {
+    body: d.corps || '',
+    icon: './icone-192.png',
+    badge: './icone-192.png',
+    tag: d.tag || 'kosmeo',
+    renotify: true,
+    data: { url: d.url || './' }
+  }));
+});
+
+/* Toucher la notification : on ouvre (ou ramène au premier plan) l'appli. */
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const cible = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then(liste => {
+    for (const c of liste) { if ('focus' in c) return c.focus(); }
+    if (clients.openWindow) return clients.openWindow(cible);
+  }));
 });
