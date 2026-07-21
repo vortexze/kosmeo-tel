@@ -4,7 +4,7 @@
    - Le fichier de données chiffré n'est JAMAIS mis en cache par le SW : c'est la
      page qui garde la dernière version (localStorage). On veut toujours essayer
      d'aller chercher le plus frais quand il y a du réseau. */
-const CACHE = 'kosmeo-mobile-v3';
+const CACHE = 'kosmeo-mobile-v4';
 const COQUILLE = ['./', './index.html', './manifest.webmanifest', './icone-192.png', './icone-512.png'];
 
 self.addEventListener('install', e => {
@@ -41,6 +41,9 @@ self.addEventListener('push', e => {
     badge: './icone-192.png',
     tag: d.tag || 'kosmeo',
     renotify: true,
+    silent: false,                       // laisse le téléphone jouer le son
+    vibrate: [200, 100, 200],            // + vibration pour attirer l'attention
+    requireInteraction: true,            // reste affichée tant qu'on ne l'ouvre pas
     data: { url: d.url || './' }
   }));
 });
